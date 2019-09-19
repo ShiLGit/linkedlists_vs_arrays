@@ -4,8 +4,9 @@ Name: Lilian Shi
 Stu#: 1048355
 Email: lshi02@uoguelph.ca
 */
+#include <stdio.h>
 #include <stdlib.h>
-const int MAX_BLOCKS = 4096;
+#define MAX_BLOCKS 4096
 
 struct ds_counts_struct{
   int reads;
@@ -21,4 +22,4 @@ struct ds_blocks_struct{
 struct ds_file_struct{
   FILE *fp;
   struct ds_blocks_struct block[MAX_BLOCKS];
-}
+};
