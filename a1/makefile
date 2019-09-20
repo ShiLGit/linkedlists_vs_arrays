@@ -7,7 +7,7 @@ all: exe
 exe: main.o
 	$(CC) main.o -oexe
 
-main.o: main.c matrix.h
+main.o: main.c ds_memory.h ds_memory.c	
 	$(CC) $(CFLAGS) -c main.c -oexe
 
 clean:
