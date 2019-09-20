@@ -1,14 +1,14 @@
 CC=gcc
 CFLAGS=-Wall -ANSI -Pedantic
 
-matrix: main.o
-	$(CC) main.o -o$@
+all: exe
+	$(CC) $(CFLAGS) -c main.c -o
+
+exe: main.o
+	$(CC) main.o -oexe
 
 main.o: main.c matrix.h
-	$(CC) $(CFLAGS) -c main.c -o$@
-
-run:
-	./matrix
+	$(CC) $(CFLAGS) -c main.c -oexe
 
 clean:
-	rm ./*.o ./matrix
+	rm -i exe
