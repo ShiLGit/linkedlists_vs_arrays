@@ -21,7 +21,7 @@ int ds_create(char *filename, long size){
 /*  ds_file->fp = fopen(filename, "wb");
   console.log(sizeof(struct ds_block));
 */
-  //ds_file.fp = fwrite(ds_file.block, sizeof(struct ds_block))
+  ds_file.fp = fwrite(ds_file.block, sizeof(struct ds_block))
 
   return 0;
 }
