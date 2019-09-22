@@ -16,12 +16,7 @@ size: length of first array entry
 ds_create: create file of filename; write "header" (ds_file.block) into file
 */
 int ds_create(char *filename, long size){
-  printf("sma");
 
-/*  ds_file->fp = fopen(filename, "wb");
-  console.log(sizeof(struct ds_block));
-*/
-  ds_file.fp = fwrite(ds_file.block, sizeof(struct ds_block))
 
   return 0;
 }

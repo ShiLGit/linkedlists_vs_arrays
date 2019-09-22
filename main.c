@@ -3,4 +3,5 @@
 
 int main(){
   printf("SUCK MY ASS FAM");
+  return 0;
 }
