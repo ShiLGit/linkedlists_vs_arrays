@@ -4,8 +4,10 @@ Name: Lilian Shi
 Stu#: 1048355
 Email: lshi02@uoguelph.ca
 */
-#include <stdio.h>
-#include <stdlib.h>
+
+#ifndef DS_MEMORY
+#define DS_MEMORY
+
 #define MAX_BLOCKS 4096
 
 struct ds_counts_struct{
@@ -23,3 +25,8 @@ struct ds_file_struct{
   FILE *fp;
   struct ds_blocks_struct block[MAX_BLOCKS];
 };
+
+int ds_create(char *filename, long size);
+
+
+#endif
