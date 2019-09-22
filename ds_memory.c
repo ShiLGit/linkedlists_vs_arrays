@@ -22,6 +22,10 @@ ds_create: create file of filename; write "header" (ds_file.block) into file
 int ds_create(char *filename, long size){
   FILE* fp = fopen(filename, "wb");
 
+  if(fp == null){
+    return 1;
+  }
+
   //set values in block array
   ds_file.block[0].start = 0;
   ds_file.block[0].length = size;
@@ -35,6 +39,11 @@ int ds_create(char *filename, long size){
 
   //write block into file "heder"
   fwrite(ds_file.block, sizeof(struct ds_blocks_struct), 4096, fp);
+
+  int byte = 0;
+  fseek(fp, size, SEEK_CUR);
+  fwrite(&byte, sizeof(byte), 1, fp);
+
   fclose(fp);
 
   return 0;
