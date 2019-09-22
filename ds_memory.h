@@ -31,6 +31,5 @@ struct ds_file_struct{
 
 int ds_create(char *filename, long size);
 
-int wtf(void);
 
 #endif

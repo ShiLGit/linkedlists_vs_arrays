@@ -3,9 +3,6 @@
 #include "ds_memory.h"
 
 int main(){
-  printf("\ndscountes: %d\n", sizeof(struct ds_counts_struct));
-  printf("\nblocks: %d\n", sizeof(long long));
-  printf("\nfiles: %d\n", sizeof(struct ds_file_struct));
-
+  printf("\nds_create  = %d", ds_create("test.bin", 0));
   return 0;
 }

@@ -22,14 +22,20 @@ ds_create: create file of filename; write "header" (ds_file.block) into file
 int ds_create(char *filename, long size){
   FILE* fp = fopen(filename, "wb");
 
+  //set values in block array
   ds_file.block[0].start = 0;
   ds_file.block[0].length = size;
   ds_file.block[0].alloced = 0;
 
+  for(int i = 0; i < 4095; i++){
+    ds_file.block[i].start = 0;
+    ds_file.block[i].length = 0;
+    ds_file.block[i].alloced = 0;
+  }
+
+  //write block into file "heder"
+  fwrite(ds_file.block, sizeof(struct ds_blocks_struct), 4096, fp);
+  fclose(fp);
+
   return 0;
-}
-
-int wtf(){
-
-  return 99;
 }
