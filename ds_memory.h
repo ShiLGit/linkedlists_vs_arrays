@@ -5,8 +5,11 @@ Stu#: 1048355
 Email: lshi02@uoguelph.ca
 */
 
-#ifndef DS_MEMORY
-#define DS_MEMORY
+#ifndef __DS_MEMORY__
+#define __DS_MEMORY__
+
+#include <stdio.h>
+#include <stdlib.h>
 
 #define MAX_BLOCKS 4096
 
@@ -28,5 +31,6 @@ struct ds_file_struct{
 
 int ds_create(char *filename, long size);
 
+int wtf(void);
 
 #endif
