@@ -21,8 +21,9 @@ ds_create: create file of filename; write "header" (ds_file.block) into file
 
 int ds_create(char *filename, long size){
   FILE* fp = fopen(filename, "wb");
+  int checker;
 
-  if(fp == null){
+  if(fp == NULL){
     return 1;
   }
 
@@ -38,13 +39,27 @@ int ds_create(char *filename, long size){
   }
 
   //write block into file "heder"
-  fwrite(ds_file.block, sizeof(struct ds_blocks_struct), 4096, fp);
+  checker = fwrite(ds_file.block, sizeof(struct ds_blocks_struct), 4096, fp);
+  if(checker != 4096){
+    return 1;
+  }
 
+  //write bytes after file header
   int byte = 0;
-  fseek(fp, size, SEEK_CUR);
-  fwrite(&byte, sizeof(byte), 1, fp);
+  if(size > 0){
+    fseek(fp, size, SEEK_CUR);
+    checker = fwrite(&byte, sizeof(byte), 1, fp);
+    checker = checker < 1;
+  }
 
-  fclose(fp);
+  if(checker == 1){
+    printf("\nCHECKER = %d: SOMETHING WENT WRONG WITH FWRITE", checker);
+    return 1;
+  }
+
+  if(fclose(fp) != 0){
+    return 1;
+  }
 
   return 0;
 }
