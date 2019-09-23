@@ -30,12 +30,12 @@ int ds_create(char *filename, long size){
   //set values in block array
   ds_file.block[0].start = 0;
   ds_file.block[0].length = size;
-  ds_file.block[0].alloced = 0;
+  ds_file.block[0].alloced = '0';
 
   for(int i = 1; i < 4096; i++){
     ds_file.block[i].start = 0;
     ds_file.block[i].length = 0;
-    ds_file.block[i].alloced = 0;
+    ds_file.block[i].alloced = '0';
   }
 
   //write block into file "heder"
@@ -58,8 +58,21 @@ int ds_create(char *filename, long size){
 }
 
 int ds_init(char *filename){
-  ds_file.fp = fopen(filename, "rb");
+  //load fp into global var
+  ds_file.fp = fopen(filename, "rb+");
+  if(ds_file.fp == NULL){
+    return 1;
+  }
+
+  //loda header into global varaibiel!
   fread(ds_file.block, sizeof(struct ds_blocks_struct), 4096, ds_file.fp);
-  printf("\n%lu\n", ds_file.block[0].length);
+  ds_init_TEST();
+  printf("\nblock[0].length = %lu\n", ds_file.block[4095].length);
   return 0;
+}
+
+void ds_init_TEST(){
+  for(int i = 0; i < 4095; i+= 1){
+    printf("\nblock[%d]: length = %lu, start = %lu, alloced = '%c'", i, ds_file.block[i].length, ds_file.block[i].start, ds_file.block[i].alloced);
+  }
 }
