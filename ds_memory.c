@@ -32,7 +32,7 @@ int ds_create(char *filename, long size){
   ds_file.block[0].length = size;
   ds_file.block[0].alloced = 0;
 
-  for(int i = 0; i < 4095; i++){
+  for(int i = 1; i < 4096; i++){
     ds_file.block[i].start = 0;
     ds_file.block[i].length = 0;
     ds_file.block[i].alloced = 0;
@@ -49,23 +49,17 @@ int ds_create(char *filename, long size){
   for(int i = 0; i < size; i++){
     fwrite(&byte, sizeof(byte), 1, fp);
   }
-
-  
-  /* if(size > 0){
-    printf("\nwtf..");
-    fseek(fp, size, SEEK_CUR);
-    checker = fwrite(&byte, sizeof(byte), 1, fp);
-    checker = checker < 1;
-  }
-*/
-  if(checker == 1){
-    printf("\nCHECKER = %d: SOMETHING WENT WRONG WITH FWRITE", checker);
-    return 1;
-  }
-
+ 
   if(fclose(fp) != 0){
     return 1;
   }
 
+  return 0;
+}
+
+int ds_init(char *filename){
+  ds_file.fp = fopen(filename, "rb");
+  fread(ds_file.block, sizeof(struct ds_blocks_struct), 4096, ds_file.fp);
+  printf("\n%lu\n", ds_file.block[0].length);
   return 0;
 }
