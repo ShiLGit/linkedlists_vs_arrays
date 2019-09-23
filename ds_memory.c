@@ -45,13 +45,19 @@ int ds_create(char *filename, long size){
   }
 
   //write bytes after file header
-  int byte = 0;
-  if(size > 0){
+  char byte = '\0';
+  for(int i = 0; i < size; i++){
+    fwrite(&byte, sizeof(byte), 1, fp);
+  }
+
+  
+  /* if(size > 0){
+    printf("\nwtf..");
     fseek(fp, size, SEEK_CUR);
     checker = fwrite(&byte, sizeof(byte), 1, fp);
     checker = checker < 1;
   }
-
+*/
   if(checker == 1){
     printf("\nCHECKER = %d: SOMETHING WENT WRONG WITH FWRITE", checker);
     return 1;
