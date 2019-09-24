@@ -66,13 +66,51 @@ int ds_init(char *filename){
 
   //loda header into global varaibiel!
   fread(ds_file.block, sizeof(struct ds_blocks_struct), 4096, ds_file.fp);
-  ds_init_TEST();
-  printf("\nblock[0].length = %lu\n", ds_file.block[4095].length);
   return 0;
 }
 
-void ds_init_TEST(){
-  for(int i = 0; i < 4095; i+= 1){
+long ds_malloc(long amount){
+  int indexOne, indexTwo;
+  long returnVal;
+  indexOne = indexTwo = -1;
+ 
+
+  
+  for(int i =0; i < 4096; i++){
+    if(ds_file.block[i].length >= amount && ds_file.block[i].alloced == '0'){
+      indexOne = i;
+      returnVal = ds_file.block[i].start;
+      printf("\nblock[%d] start = %lu, rval = %lu", i, ds_file.block[indexOne].start, returnVal);
+      break;
+    }
+    return -1; //no unused memory block found
+  }
+
+  for(int i = 0; i < 4096; i++){
+    if(ds_file.block[i].length ==0){
+      indexTwo = i;
+      break;
+    }
+    returnVal = -1; //no secondary block found
+  }
+
+  //set block 2 first
+  ds_file.block[indexTwo].start = ds_file.block[indexOne].start + amount;
+  ds_file.block[indexTwo].length = ds_file.block[indexOne].length - amount;
+  ds_file.block[indexTwo].alloced = 0;
+  
+  ds_file.block[indexOne].length = amount;
+  ds_file.block[indexOne].alloced = '1';
+
+  printf("\n%lu", returnVal);
+  return returnVal;
+}
+
+//print tha dumbass array!!!!!!!!!!!
+void ds_print(){
+  for(int i = 0; i < 4096; i++){
     printf("\nblock[%d]: length = %lu, start = %lu, alloced = '%c'", i, ds_file.block[i].length, ds_file.block[i].start, ds_file.block[i].alloced);
   }
+  printf("\n");
 }
+
