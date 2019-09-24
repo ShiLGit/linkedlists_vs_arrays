@@ -33,5 +33,6 @@ int ds_create(char *filename, long size);
 int ds_init(char*);
 void ds_print();
 long ds_malloc(long);
+void ds_free();
 
 #endif

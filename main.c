@@ -6,7 +6,12 @@
 int main(){
   printf("\nds_create  = %d\n", ds_create("test.bin", 11234));
   ds_init("test.bin");
-  printf("\n%lu,", ds_malloc(11));
-  ds_malloc(22000);
+  long fuk = ds_malloc(1110);
+  printf("\n%ld,", fuk);
+  ds_print(10);
+
+  ds_free(fuk);
+  ds_print(10);
+
   return 0;
 }

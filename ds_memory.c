@@ -32,7 +32,7 @@ int ds_create(char *filename, long size){
   ds_file.block[0].length = size;
   ds_file.block[0].alloced = '0';
 
-  for(int i = 1; i < 4096; i++){
+  for(int i = 1; i < 4096; i++){//START AT 1 TO AVOID OVERWRITING FIRST BLOK
     ds_file.block[i].start = 0;
     ds_file.block[i].length = 0;
     ds_file.block[i].alloced = '0';
@@ -49,7 +49,7 @@ int ds_create(char *filename, long size){
   for(int i = 0; i < size; i++){
     fwrite(&byte, sizeof(byte), 1, fp);
   }
- 
+
   if(fclose(fp) != 0){
     return 1;
   }
@@ -69,48 +69,62 @@ int ds_init(char *filename){
   return 0;
 }
 
+//METHOOOOOOOOOOOOOOOOOOOOOOOD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 long ds_malloc(long amount){
   int indexOne, indexTwo;
   long returnVal;
   indexOne = indexTwo = -1;
- 
+  returnVal = -1;
 
-  
   for(int i =0; i < 4096; i++){
     if(ds_file.block[i].length >= amount && ds_file.block[i].alloced == '0'){
       indexOne = i;
       returnVal = ds_file.block[i].start;
-      printf("\nblock[%d] start = %lu, rval = %lu", i, ds_file.block[indexOne].start, returnVal);
       break;
     }
-    return -1; //no unused memory block found
+  }
+  if(indexOne == -1){
+    printf("\nNo block1 fond.");
+    return -1;
   }
 
   for(int i = 0; i < 4096; i++){
     if(ds_file.block[i].length ==0){
       indexTwo = i;
+      printf("\nds_malloc: set index two to %d", i);
       break;
     }
-    returnVal = -1; //no secondary block found
+  }
+  if(indexTwo == -1){//unable to find blcok 2 >>set returnval from start of block1 to -1 to indicate errrrerus
+    printf("\nNo block2 found.");
+    returnVal = -1;
+  }else{
+    //set block 2 first if it exists
+    ds_file.block[indexTwo].start = ds_file.block[indexOne].start + amount;
+    ds_file.block[indexTwo].length = ds_file.block[indexOne].length - amount;
+    ds_file.block[indexTwo].alloced = '0';
   }
 
-  //set block 2 first
-  ds_file.block[indexTwo].start = ds_file.block[indexOne].start + amount;
-  ds_file.block[indexTwo].length = ds_file.block[indexOne].length - amount;
-  ds_file.block[indexTwo].alloced = 0;
-  
   ds_file.block[indexOne].length = amount;
   ds_file.block[indexOne].alloced = '1';
 
-  printf("\n%lu", returnVal);
   return returnVal;
 }
-
-//print tha dumbass array!!!!!!!!!!!
-void ds_print(){
+//METHOOOOOOOOOOOOOOOOOOOOOOOD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+void ds_free(long start){
   for(int i = 0; i < 4096; i++){
-    printf("\nblock[%d]: length = %lu, start = %lu, alloced = '%c'", i, ds_file.block[i].length, ds_file.block[i].start, ds_file.block[i].alloced);
+    if(ds_file.block[i].start == start){
+      printf("\nds_free: freed block at %d", i);
+      ds_file.block[i].alloced = '0';
+      break;
+    }
+  }
+  return;
+}
+//print tha dumbass array!!!!!!!!!!!
+void ds_print(int max){
+  for(int i = 0; i < max; i++){
+    printf("\nblock[%d]: length = %ld, start = %ld, alloced = '%c'", i, ds_file.block[i].length, ds_file.block[i].start, ds_file.block[i].alloced);
   }
   printf("\n");
 }
-
