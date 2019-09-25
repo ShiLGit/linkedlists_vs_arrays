@@ -3,7 +3,7 @@ CFLAGS = -Wall -ansi -pedantic
 
 all: main1
 
-main1: main.o ds_memory.o
+main1: main.o ds_memory.o ds_array.o
 	$(CC) $(CFLAGS) main.o  ds_memory.o -o a1
 
 main.o: main.c
@@ -11,3 +11,6 @@ main.o: main.c
 
 ds_memory.o: ds_memory.c
 	$(CC) $(FLAGS) -c ds_memory.c -o $@
+
+ds_array.o: ds_array.c
+	$(CC) $(CFLAGS) -c ds_array.c -o $@
