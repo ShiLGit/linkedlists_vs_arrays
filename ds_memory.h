@@ -37,5 +37,6 @@ void ds_free();
 int ds_finish();
 
 void *ds_read(void*, long, long);
+long ds_write(long, void*, long);
 
 #endif

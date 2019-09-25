@@ -137,6 +137,7 @@ int ds_finish(){
   if(flag != 4096){ //return error: didn't write all ele into file
     return 0;
   }
+  printf("\nnumReads: %d\nnumWrites: %d\n", ds_counts.reads, ds_counts.writes);
   return 1;
 }
 
@@ -148,7 +149,6 @@ void *ds_read(void *ptr, long start, long bytes){ //rCATUSION: reading fat value
   }
 
   flag = fseek(ds_file.fp, sizeof(ds_file.block) + start, SEEK_SET);
-  printf("\nftell: %p", ftell(ds_file.fp));
   if(flag !=0 ){//fseek failed
     return NULL;
   }
@@ -158,10 +158,8 @@ void *ds_read(void *ptr, long start, long bytes){ //rCATUSION: reading fat value
     printf("\nfrom ds_read: fread() failed :%d", flag);
     return NULL;
   }
-  
-  printf("\nreading %d", *(int*)ptr);
+
   ds_counts.reads++;
-  printf("\n%dreads", ds_counts.reads);
   return ptr;
 }
 
@@ -174,17 +172,25 @@ long ds_write(long start, void *ptr, long bytes){
 
   flag = fseek(ds_file.fp, sizeof(ds_file.block) + start, SEEK_SET);
   if(flag != 0){//fseek failed
-    return -1
+    return -1;
   }
+
+  flag = fwrite(ptr, bytes, 1, ds_file.fp);
+  if(flag != 1){//fwrite failed
+    return -1;
+  }
+
+  ds_counts.writes++;
+  return start;
 
 }
 //print tha dumbass array!!!!!!!!!!!
 void ds_print(int max){
   for(int i = 0; i < max; i++){
-    printf("\nblock[%d]: length = %ld, start = %ld, alloced = '%c'", i, ds_file.block[i].length, ds_file.block[i].start, ds_file.block[i].alloced);
+    printf("\nblock[%d]: start = %ld, length = %ld, alloced = '%c'", i, ds_file.block[i].start, ds_file.block[i].length, ds_file.block[i].alloced);
   }
   for(int i = 4093; i < 4096; i++){
-    printf("\nblock[%d]: length = %ld, start = %ld, alloced = '%c'", i, ds_file.block[i].length, ds_file.block[i].start, ds_file.block[i].alloced);
+    printf("\nblock[%d]: start = %ld, length = %ld, alloced = '%c'", i, ds_file.block[i].start, ds_file.block[i].length, ds_file.block[i].alloced);
   }
   printf("\n");
 }
