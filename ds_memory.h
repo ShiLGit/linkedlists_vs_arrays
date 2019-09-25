@@ -34,5 +34,6 @@ int ds_init(char*);
 void ds_print();
 long ds_malloc(long);
 void ds_free();
+int ds_finish();
 
 #endif

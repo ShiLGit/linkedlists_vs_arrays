@@ -121,9 +121,31 @@ void ds_free(long start){
   }
   return;
 }
+//METHOOOOOOOOOOOOOOOOOOOOOOOD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+int ds_finish(){
+  int flag;
+  if(ds_file.fp == NULL){
+    return 1;
+  }
+
+  flag = fseek(ds_file.fp, 0, SEEK_SET);
+  if(flag != 0){ //return error if fseek failed
+    return 0;
+  }
+  //write changed header into DISCK
+  flag = fwrite(ds_file.block, sizeof(struct ds_blocks_struct), 4096, ds_file.fp);
+
+  if(flag != 4096){ //return error: didn't write all ele into file
+    return 0;
+  }
+  return 1;
+}
 //print tha dumbass array!!!!!!!!!!!
 void ds_print(int max){
   for(int i = 0; i < max; i++){
+    printf("\nblock[%d]: length = %ld, start = %ld, alloced = '%c'", i, ds_file.block[i].length, ds_file.block[i].start, ds_file.block[i].alloced);
+  }
+  for(int i = 4093; i < 4096; i++){
     printf("\nblock[%d]: length = %ld, start = %ld, alloced = '%c'", i, ds_file.block[i].length, ds_file.block[i].start, ds_file.block[i].alloced);
   }
   printf("\n");
