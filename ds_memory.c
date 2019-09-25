@@ -91,7 +91,6 @@ long ds_malloc(long amount){
   for(int i = 0; i < 4096; i++){
     if(ds_file.block[i].length ==0){
       indexTwo = i;
-      printf("\nds_malloc: set index two to %d", i);
       break;
     }
   }
@@ -139,6 +138,45 @@ int ds_finish(){
     return 0;
   }
   return 1;
+}
+
+//METHOOOOOOOOOOOOOOOOOOOOOOOD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+void *ds_read(void *ptr, long start, long bytes){ //rCATUSION: reading fat values (byte = big number) is problematic..
+  int flag;
+  if(ds_file.fp == NULL){//file aint even open!!!
+    return NULL;
+  }
+
+  flag = fseek(ds_file.fp, sizeof(ds_file.block) + start, SEEK_SET);
+  printf("\nftell: %p", ftell(ds_file.fp));
+  if(flag !=0 ){//fseek failed
+    return NULL;
+  }
+
+  flag = fread(ptr, bytes, 1, ds_file.fp);
+  if(flag != 1){
+    printf("\nfrom ds_read: fread() failed :%d", flag);
+    return NULL;
+  }
+  
+  printf("\nreading %d", *(int*)ptr);
+  ds_counts.reads++;
+  printf("\n%dreads", ds_counts.reads);
+  return ptr;
+}
+
+long ds_write(long start, void *ptr, long bytes){
+  int flag;
+
+  if(ds_file.fp == NULL){//fp aint even loaded faaaaaaaam
+    return -1;
+  }
+
+  flag = fseek(ds_file.fp, sizeof(ds_file.block) + start, SEEK_SET);
+  if(flag != 0){//fseek failed
+    return -1
+  }
+
 }
 //print tha dumbass array!!!!!!!!!!!
 void ds_print(int max){

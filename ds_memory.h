@@ -36,4 +36,6 @@ long ds_malloc(long);
 void ds_free();
 int ds_finish();
 
+void *ds_read(void*, long, long);
+
 #endif
