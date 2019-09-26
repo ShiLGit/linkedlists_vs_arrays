@@ -3,4 +3,5 @@
 #include <stdio.h>
 
 int ds_create_array();
+int ds_init_array();
 #endif

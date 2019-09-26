@@ -1,5 +1,6 @@
 #include "ds_array.h"
 #include "ds_memory.h"
+#include <stdlib.h>
 #define MAX_ELEMENTS 256
 
 long elements;
@@ -38,4 +39,28 @@ int ds_create_array(){
   }
 
   return 0;
+}
+
+int ds_init_array(){
+  int flag;
+  void *flag2;
+  void *val = malloc(sizeof(long));
+
+  flag = ds_init("array.bin");
+  if(flag != 0){
+      return flag;
+  }
+
+  flag2 = ds_read(val, 0, sizeof(long));
+  if(flag2 == NULL){
+    printf("\nds_init: ds_read() failed!");
+    return 1;
+  }
+  elements = *(long*)val;
+  free(val);
+
+  printf("\nElements = %ld", elements);
+  return 0;
+
+
 }

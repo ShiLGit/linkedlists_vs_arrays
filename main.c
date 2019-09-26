@@ -9,7 +9,7 @@ int main()
   */
   int p = ds_create_array();
   printf("\n%d", p);
-  ds_print(10);
+  ds_init_array();
   ds_finish();
   return 0;
 }
