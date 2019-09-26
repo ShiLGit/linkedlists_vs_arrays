@@ -7,5 +7,5 @@ int ds_init_array();
 void ds_print_array();
 int ds_finish_array();
 
-int ds_insert();
+int ds_insert(int, long);
 #endif

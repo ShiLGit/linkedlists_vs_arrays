@@ -8,6 +8,12 @@ void ds_show_array(){
 }
 int main()
 {
-  ds_show_array();
+//  ds_show_array();
+
+  ds_init_array();
+  ds_insert(999, 0);
+  ds_insert(998, 1);
+  ds_insert(908, 40);
+  ds_print_array();
   return 0;
 }

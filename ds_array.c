@@ -81,7 +81,55 @@ int ds_finish_array(){
 }
 
 int ds_insert(int value, long index){
+  int temp;
+  void *flag;
+  long flag2;
+  void *ptrRead = malloc(sizeof(int));
+  void *ptrWrite;
 
+  /*preliminary errorechgkinc*/
+  if(index >255){/**index out of bounds*/
+    return 1;
+  }else if(elements == MAX_ELEMENTS){/*can't insert more eleemenest*/
+    return 1;
+  }else if(index > elements){/*tryna insert element at phat index when array is too small*/
+    return 1;
+  }
+
+  /*edge case: insert eleemnt at end of araiyayaIAYA*/
+  if(index == elements){
+    ptrWrite = &value;
+    flag2 = ds_write(sizeof(int)*index +sizeof(long), ptrWrite, sizeof(int));
+    if(flag2 == -1){
+      return flag2;
+    }else{
+      elements++;
+      return 0;
+    }
+
+  }
+
+  /*read current RESIDENT OF INDEX into temp */
+  flag = ds_read(ptrRead, sizeof(int)*index + sizeof(long), sizeof(int)); /*+sizeof long to account for element -tracking long at "beginning" of .bin*/
+  if(flag == NULL){
+    printf("\nds_insert: ds_read failed");
+    return 1;
+  }
+  temp = *(int*)ptrRead;
+
+  /*write value into ele at index*/
+  ptrWrite = &value;
+  flag2 = ds_write(sizeof(int)*index + sizeof(long), ptrWrite, sizeof(int));
+
+  /*
+  WHAT IF THERE'S AN ERROR LATER? (E>G> EXCEEDED ELE 256)
+  -FCLOSE TO DISCARD CHANGES TO FILE
+  */  printf("\nele = %ld", elements);
+  elements++;
+  printf("\nele = %ld", elements);
+
+  free(ptrRead);
+  return 0;
 }
 
 
@@ -94,12 +142,13 @@ void ds_print_array(){
   int i;
   void *val = malloc(sizeof(int));
 
-  ds_init_array();
+  /*ds_init_array();*/
   ds_print(10);
   printf("\nds_print_array: Elements = %ld", elements);
   for(i = 0; i<elements; i++){
-    printf("\nlmaoooo");
     ds_read(val, sizeof(long) + i * sizeof(int), sizeof(int));
     printf("\narray[%d] = %d", i , *(int*)val);
   }
+
+  free(val);
 }
