@@ -88,7 +88,7 @@ int ds_insert(int value, long index){
   void *ptrWrite;
 
   /*preliminary errorechgkinc*/
-  if(index >255){/**index out of bounds*/
+  if(index >= MAX_ELEMENTS || index < 0){/**index out of bounds*/
     return 1;
   }else if(elements == MAX_ELEMENTS){/*can't insert more eleemenest*/
     return 1;
@@ -108,8 +108,7 @@ int ds_insert(int value, long index){
     }
   }
 
-  for(index; index <= elements; index++){
-    printf("\nNext value to write in: %d", value);
+  for(; index <= elements; index++){
 
     /*read current RESIDENT OF INDEX into temp */
     flag = ds_read(ptrRead, sizeof(int)*index + sizeof(long), sizeof(int)); /*+sizeof long to account for element -tracking long at "beginning" of .bin*/
@@ -135,10 +134,22 @@ int ds_insert(int value, long index){
   return 0;
 }
 
+int ds_replace(int value, long index){
+  int flag;
+  void *toWrite;
+  toWrite = &value;
 
+  /*preliminary errorchecking: invalid index*/
+  if(index > MAX_ELEMENTS || index >= elements ||index < 0){
+    return -1;
+  }
 
+  flag = ds_write(sizeof(long) + sizeof(int)*index, toWrite, sizeof(int));
+  if(flag == -1)
+    return flag;
 
-
+  return 0;
+}
 
 
 void ds_print_array(){
@@ -149,7 +160,8 @@ void ds_print_array(){
   ds_print(10);
   printf("\nds_print_array: Elements = %ld", elements);
   for(i = 0; i<elements; i++){
-    ds_read(val, sizeof(long) + i * sizeof(int), sizeof(int));
+    if(ds_read(val, sizeof(long) + i * sizeof(int), sizeof(int)) == 0)
+      break;
     printf("\narray[%d] = %d", i , *(int*)val);
   }
 

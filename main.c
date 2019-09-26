@@ -8,15 +8,22 @@ void ds_show_array(){
 }
 int main()
 {
-  ds_create_array();
-//  ds_show_array();
+  /* write new file that hasn't been fked
+ds_create_array();
+ds_finish();
+*/
+ds_init_array();
 
-  ds_init_array();
-  ds_insert(999, 0);
-  ds_insert(998, 1);
-  ds_insert(996, 2);
-  ds_insert(997, 2);
-  ds_insert(1000,0);
-  ds_print_array();
-  return 0;
+printf("\ndsreplae = %d", ds_replace(-9000000, 2));
+
+ds_finish_array();
+
+ds_init_array();
+
+ds_print_array();
+
+/*
+//ds_finish_array();
+ds_print_array();
+  */return 0;
 }
