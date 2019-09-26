@@ -1,5 +1,6 @@
-#ifndef __DS_MEMORY__
-#define __DS_MEMORY__
+#ifndef __DS_ARRAY__
+#define __DS_ARRAY__
 #include <stdio.h>
 
+int ds_create_array();
 #endif

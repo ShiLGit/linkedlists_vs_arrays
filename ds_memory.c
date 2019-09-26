@@ -96,7 +96,6 @@ long ds_malloc(long amount){
   }
   if(indexTwo == -1){//unable to find blcok 2 >>set returnval from start of block1 to -1 to indicate errrrerus
     printf("\nNo block2 found.");
-    returnVal = -1;
   }else{
     //set block 2 first if it exists
     ds_file.block[indexTwo].start = ds_file.block[indexOne].start + amount;
