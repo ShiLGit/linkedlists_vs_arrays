@@ -136,7 +136,8 @@ int ds_finish(){
   if(flag != 4096){ //return error: didn't write all ele into file
     return 0;
   }
-  printf("\nnumReads: %d\nnumWrites: %d\n", ds_counts.reads, ds_counts.writes);
+  printf("\nreads: %d\nwrites: %d\n", ds_counts.reads, ds_counts.writes);
+  fclose(ds_file.fp);
   return 1;
 }
 

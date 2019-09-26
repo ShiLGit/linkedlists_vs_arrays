@@ -59,8 +59,47 @@ int ds_init_array(){
   elements = *(long*)val;
   free(val);
 
-  printf("\nElements = %ld", elements);
   return 0;
+}
 
 
+
+int ds_finish_array(){
+  int flag;
+  void *ptr = &elements;
+
+  flag = ds_write(0, ptr, sizeof(long));
+  if(flag ==-1){
+    return flag;
+  }
+
+  flag = ds_finish();
+  if(flag != 1){
+    return 1;
+  }
+  return 0;
+}
+
+int ds_insert(int value, long index){
+
+}
+
+
+
+
+
+
+
+void ds_print_array(){
+  int i;
+  void *val = malloc(sizeof(int));
+
+  ds_init_array();
+  ds_print(10);
+  printf("\nds_print_array: Elements = %ld", elements);
+  for(i = 0; i<elements; i++){
+    printf("\nlmaoooo");
+    ds_read(val, sizeof(long) + i * sizeof(int), sizeof(int));
+    printf("\narray[%d] = %d", i , *(int*)val);
+  }
 }
