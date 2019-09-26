@@ -106,25 +106,28 @@ int ds_insert(int value, long index){
       elements++;
       return 0;
     }
-
   }
 
-  /*read current RESIDENT OF INDEX into temp */
-  flag = ds_read(ptrRead, sizeof(int)*index + sizeof(long), sizeof(int)); /*+sizeof long to account for element -tracking long at "beginning" of .bin*/
-  if(flag == NULL){
-    printf("\nds_insert: ds_read failed");
-    return 1;
+  for(index; index <= elements; index++){
+    printf("\nNext value to write in: %d", value);
+
+    /*read current RESIDENT OF INDEX into temp */
+    flag = ds_read(ptrRead, sizeof(int)*index + sizeof(long), sizeof(int)); /*+sizeof long to account for element -tracking long at "beginning" of .bin*/
+    if(flag == NULL){
+      printf("\nds_insert: ds_read failed");
+      return 1;
+    }
+    temp = *(int*)ptrRead;
+
+    /*write value into ele at index*/
+    ptrWrite = &value;
+    flag2 = ds_write(sizeof(int)*index + sizeof(long), ptrWrite, sizeof(int));
+
+    /*set next value to write in as value of replaced element*/
+    value = temp;
   }
-  temp = *(int*)ptrRead;
 
-  /*write value into ele at index*/
-  ptrWrite = &value;
-  flag2 = ds_write(sizeof(int)*index + sizeof(long), ptrWrite, sizeof(int));
-
-  /*
-  WHAT IF THERE'S AN ERROR LATER? (E>G> EXCEEDED ELE 256)
-  -FCLOSE TO DISCARD CHANGES TO FILE
-  */  printf("\nele = %ld", elements);
+  printf("\nele = %ld", elements);
   elements++;
   printf("\nele = %ld", elements);
 
