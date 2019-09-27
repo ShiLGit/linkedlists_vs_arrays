@@ -22,12 +22,13 @@ void resetLoad(){
 }
 int main()
 {
-
+  int f;
   ds_init_array();
 
-  ds_delete(0);
+  f = ds_swap(0, 0);
   ds_print_array();
   ds_finish_array();
+  printf("\nf = %d",f);
 
   /* write new file that hasn't been fked
 ds_create_array();

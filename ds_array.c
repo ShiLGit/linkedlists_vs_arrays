@@ -201,12 +201,47 @@ int ds_delete(long index){
     return -1;
   }
 
-  printf("\n...%ld", elements);
   elements--;
-  printf("\n...%ld", elements);
   free(nextVal);
   return 0;
 }
+
+int ds_swap(long index1, long index2){
+  int temp, flag;
+  void* readIn = malloc(sizeof(int));
+  /*preliminary errorcheck*/
+  if(index1 >= MAX_ELEMENTS || index1 >= elements || index1 < 0){
+    return -1;
+  }else if (index2 >= MAX_ELEMENTS ||index2 >= elements || index2 < 0){
+    return -1;
+  }else if(index1 == index2){
+    return 0;
+  }
+
+  /*NO ERRORCHECKING TOO LAZY*/
+  ds_read(readIn, sizeof(long) + index1*sizeof(int), sizeof(int));
+  printf("\n# at index 1: %d", *(int*)readIn);
+  temp = *(int*)readIn;
+
+  ds_read(readIn, sizeof(long) + index2*sizeof(int), sizeof(int));
+  printf("\n# at index 2: %d", *(int*)readIn);
+
+  /*move value at index 2 into index 1*/
+  flag = ds_replace(*(int*)readIn, index1);
+  if(flag !=0){
+    return -1;
+  }
+
+  /*move value stored in temp (i.e. index1's) to index2*/
+  flag = ds_replace(temp, index2);
+  if(flag !=0){
+    return -1;
+  }
+
+
+  return 0;
+}
+
 
 void ds_print_array(){
   int i;
