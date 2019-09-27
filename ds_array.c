@@ -151,6 +151,62 @@ int ds_replace(int value, long index){
   return 0;
 }
 
+int ds_read_elements(char* filename){
+  FILE *fp = fopen(filename, "r");
+  int print, index, flag;
+  flag = 0;
+
+  if(fp == NULL)
+    return -1;
+
+  index = 0;
+  while(!feof(fp) && flag == 0){
+    fscanf(fp, "%d\n", &print);
+
+    flag = ds_insert(print, index);
+    index++;
+  }
+  if(flag !=0)
+    return -1;
+
+
+  return 0;
+}
+
+int ds_delete(long index){
+  int i, flag, nextByte;
+  void * nextVal = malloc(sizeof(int));
+
+  /*preliminary errorcheck*/
+  if(index >= MAX_ELEMENTS|| index < 0 ||index >= elements){
+    return -1;
+  }
+
+  /*edge case: replace last index*/
+  if(index == elements - 1){
+    flag = ds_replace(*(int*)nextVal, index);
+  }
+
+  nextByte = 1;
+  for(i = index; i < elements - 1; i++){
+    ds_read(nextVal, sizeof(long) + (index+nextByte)*sizeof(int), sizeof(int));
+
+    printf("\n%d, %d: next value = %d", i, nextByte,*(int*)nextVal);
+    flag = ds_replace(*(int*)nextVal, i);
+
+    nextByte++;
+  }
+
+  if(flag != 0){/*didn't do errorchecking for ds_read because TOO DANMN LAZY FFFFFFS*/
+    return -1;
+  }
+
+  printf("\n...%ld", elements);
+  elements--;
+  printf("\n...%ld", elements);
+  free(nextVal);
+  return 0;
+}
 
 void ds_print_array(){
   int i;

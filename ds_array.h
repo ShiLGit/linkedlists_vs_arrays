@@ -9,4 +9,7 @@ int ds_finish_array();
 
 int ds_insert(int, long);
 int ds_replace(int, long);
+int ds_read_elements(char*);
+
+int ds_delete(long);
 #endif
