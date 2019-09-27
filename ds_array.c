@@ -242,6 +242,18 @@ int ds_swap(long index1, long index2){
   return 0;
 }
 
+int ds_find(int target){
+  void *val = malloc(sizeof(int));
+  int i;
+
+  for(i = 0; i < elements; i++){
+    ds_read(val, sizeof(long) + i *sizeof(int), sizeof(int));
+    if(target == *(int*)val){
+      return i;
+    }
+  }
+  return -1;
+}
 
 void ds_print_array(){
   int i;

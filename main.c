@@ -24,9 +24,7 @@ int main()
 {
   int f;
   ds_init_array();
-
-  f = ds_swap(0, 0);
-  ds_print_array();
+  ds_swap(0, 12);
   ds_finish_array();
   printf("\nf = %d",f);
 
