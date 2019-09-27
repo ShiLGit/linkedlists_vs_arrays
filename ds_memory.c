@@ -17,36 +17,34 @@ size: length of first array entry
 ds_create: create file of filename; write "header" (ds_file.block) into file
 */
 
-//size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream)
-
 int ds_create(char *filename, long size){
   FILE* fp = fopen(filename, "wb");
-  int checker;
+  int checker, i;
 
   if(fp == NULL){
     return 1;
   }
 
-  //set values in block array
+  /*set values in block array*/
   ds_file.block[0].start = 0;
   ds_file.block[0].length = size;
   ds_file.block[0].alloced = '0';
 
-  for(int i = 1; i < 4096; i++){//START AT 1 TO AVOID OVERWRITING FIRST BLOK
+  for(i = 1; i < 4096; i++){/*START AT 1 TO AVOID OVERWRITING FIRST BLOK*/
     ds_file.block[i].start = 0;
     ds_file.block[i].length = 0;
     ds_file.block[i].alloced = '0';
   }
 
-  //write block into file "heder"
+  /*write block into file "heder"*/
   checker = fwrite(ds_file.block, sizeof(struct ds_blocks_struct), 4096, fp);
   if(checker != 4096){
     return 1;
   }
 
-  //write bytes after file header
+  /*write bytes after file header*/
   char byte = '\0';
-  for(int i = 0; i < size; i++){
+  for(i = 0; i < size; i++){
     fwrite(&byte, sizeof(byte), 1, fp);
   }
 
@@ -58,25 +56,25 @@ int ds_create(char *filename, long size){
 }
 
 int ds_init(char *filename){
-  //load fp into global var
+  /*load fp into global var*/
   ds_file.fp = fopen(filename, "rb+");
   if(ds_file.fp == NULL){
     return 1;
   }
 
-  //loda header into global varaibiel!
+  /*loda header into global varaibiel!*/
   fread(ds_file.block, sizeof(struct ds_blocks_struct), 4096, ds_file.fp);
   return 0;
 }
 
-//METHOOOOOOOOOOOOOOOOOOOOOOOD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/*METHOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOD*/
 long ds_malloc(long amount){
-  int indexOne, indexTwo;
+  int indexOne, indexTwo, i;
   long returnVal;
   indexOne = indexTwo = -1;
   returnVal = -1;
 
-  for(int i =0; i < 4096; i++){
+  for(i =0; i < 4096; i++){
     if(ds_file.block[i].length >= amount && ds_file.block[i].alloced == '0'){
       indexOne = i;
       returnVal = ds_file.block[i].start;
@@ -88,16 +86,16 @@ long ds_malloc(long amount){
     return -1;
   }
 
-  for(int i = 0; i < 4096; i++){
+  for(i = 0; i < 4096; i++){
     if(ds_file.block[i].length ==0){
       indexTwo = i;
       break;
     }
   }
-  if(indexTwo == -1){//unable to find blcok 2 >>set returnval from start of block1 to -1 to indicate errrrerus
+  if(indexTwo == -1){/*unable to find blcok 2 >>set returnval from start of block1 to -1 to indicate errrrerus*/
     printf("\nNo block2 found.");
   }else{
-    //set block 2 first if it exists
+    /*set block 2 first if it exists*/
     ds_file.block[indexTwo].start = ds_file.block[indexOne].start + amount;
     ds_file.block[indexTwo].length = ds_file.block[indexOne].length - amount;
     ds_file.block[indexTwo].alloced = '0';
@@ -108,9 +106,10 @@ long ds_malloc(long amount){
 
   return returnVal;
 }
-//METHOOOOOOOOOOOOOOOOOOOOOOOD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/*METHOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOD*/
 void ds_free(long start){
-  for(int i = 0; i < 4096; i++){
+  int i;
+  for(i = 0; i < 4096; i++){
     if(ds_file.block[i].start == start){
       printf("\nds_free: freed block at %d", i);
       ds_file.block[i].alloced = '0';
@@ -119,7 +118,7 @@ void ds_free(long start){
   }
   return;
 }
-//METHOOOOOOOOOOOOOOOOOOOOOOOD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/*METHOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOD*/
 int ds_finish(){
   int flag;
   if(ds_file.fp == NULL){
@@ -127,13 +126,13 @@ int ds_finish(){
   }
 
   flag = fseek(ds_file.fp, 0, SEEK_SET);
-  if(flag != 0){ //return error if fseek failed
+  if(flag != 0){ /*return error if fseek failed*/
     return 0;
   }
-  //write changed header into DISCK
+  /*write changed header into DISCK*/
   flag = fwrite(ds_file.block, sizeof(struct ds_blocks_struct), 4096, ds_file.fp);
 
-  if(flag != 4096){ //return error: didn't write all ele into file
+  if(flag != 4096){ /*return error: didn't write all ele into file*/
     return 0;
   }
   printf("\nreads: %d\nwrites: %d\n", ds_counts.reads, ds_counts.writes);
@@ -141,15 +140,15 @@ int ds_finish(){
   return 1;
 }
 
-//METHOOOOOOOOOOOOOOOOOOOOOOOD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-void *ds_read(void *ptr, long start, long bytes){ //rCATUSION: reading fat values (byte = big number) is problematic..
+/*METHOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOD*/
+void *ds_read(void *ptr, long start, long bytes){ /*rCATUSION: reading fat values (byte = big number) is problematic..*/
   int flag;
-  if(ds_file.fp == NULL){//file aint even open!!!
+  if(ds_file.fp == NULL){
     return NULL;
   }
 
   flag = fseek(ds_file.fp, sizeof(ds_file.block) + start, SEEK_SET);
-  if(flag !=0 ){//fseek failed
+  if(flag !=0 ){
     return NULL;
   }
 
@@ -166,17 +165,18 @@ void *ds_read(void *ptr, long start, long bytes){ //rCATUSION: reading fat value
 long ds_write(long start, void *ptr, long bytes){
   int flag;
 
-  if(ds_file.fp == NULL){//fp aint even loaded faaaaaaaam
+  if(ds_file.fp == NULL){
+    printf("\nfp doesnt exist dumbass");
     return -1;
   }
 
   flag = fseek(ds_file.fp, sizeof(ds_file.block) + start, SEEK_SET);
-  if(flag != 0){//fseek failed
+  if(flag != 0){
     return -1;
   }
 
   flag = fwrite(ptr, bytes, 1, ds_file.fp);
-  if(flag != 1){//fwrite failed
+  if(flag != 1){
     return -1;
   }
 
@@ -184,12 +184,13 @@ long ds_write(long start, void *ptr, long bytes){
   return start;
 
 }
-//print tha dumbass array!!!!!!!!!!!
+/*print array*/
 void ds_print(int max){
-  for(int i = 0; i < max; i++){
+  int i;
+  for(i = 0; i < max; i++){
     printf("\nblock[%d]: start = %ld, length = %ld, alloced = '%c'", i, ds_file.block[i].start, ds_file.block[i].length, ds_file.block[i].alloced);
   }
-  for(int i = 4093; i < 4096; i++){
+  for(i = 4093; i < 4096; i++){
     printf("\nblock[%d]: start = %ld, length = %ld, alloced = '%c'", i, ds_file.block[i].start, ds_file.block[i].length, ds_file.block[i].alloced);
   }
   printf("\n");

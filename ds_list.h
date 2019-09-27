@@ -4,7 +4,7 @@
 struct ds_list_item_struct{
   int item;
   long next;
-}
+};
 typedef struct ds_list_item_struct ds_list_item;
 
 void ds_create_list();
@@ -13,7 +13,6 @@ int ds_replace(int, long);
 int ds_insert(int, long);
 int ds_delete(long);
 int ds_swap(long, long);
-long ds_find(int);
 int ds_read_elements(char*);
 int ds_finish();
 

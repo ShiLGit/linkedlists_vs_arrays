@@ -2,6 +2,7 @@
 #include "ds_memory.h"
 #include <stdio.h>
 #include "ds_array.h"
+#include "ds_list.h"
 
 void ds_show_array(){
   ds_print_array();
@@ -22,11 +23,8 @@ void resetLoad(){
 }
 int main()
 {
-  int f;
-  ds_init_array();
-  ds_swap(0, 12);
-  ds_finish_array();
-  printf("\nf = %d",f);
+
+  ds_create_list();
 
   /* write new file that hasn't been fked
 ds_create_array();

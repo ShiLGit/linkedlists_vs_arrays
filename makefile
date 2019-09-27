@@ -4,7 +4,7 @@ CFLAGS = -Wall -ansi -pedantic
 all: main1 insert_array
 
 main1: main.o ds_memory.o ds_array.o ds_list.o
-	$(CC) $(CFLAGS) main.o  ds_memory.o ds_array.o -o a1
+	$(CC) $(CFLAGS) main.o  ds_memory.o ds_array.o ds_list.o -o a1
 
 insert_array: insert_array.o ds_memory.o ds_array.o
 	$(CC) $(CFLAGS) insert_array.o ds_memory.o ds_array.o -o insert_array
