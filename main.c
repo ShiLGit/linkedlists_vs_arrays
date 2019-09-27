@@ -1,6 +1,6 @@
 
 #include "ds_memory.h"
-#include "stdio.h"
+#include <stdio.h>
 #include "ds_array.h"
 
 void ds_show_array(){
