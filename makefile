@@ -1,10 +1,13 @@
 CC = gcc
 CFLAGS = -Wall -ansi -pedantic
 
-all: main1 insert_array
+all: insert_array main2 main1
 
-main1: main.o ds_memory.o ds_array.o ds_list.o
-	$(CC) $(CFLAGS) main.o  ds_memory.o ds_array.o ds_list.o -o a1
+main2: main.o ds_memory.o ds_array.o ds_list.o
+	$(CC) $(CFLAGS) main.o ds_memory.o ds_list.o -o main2
+
+main1: maina.o ds_memory.o ds_array.o
+	$(CC) $(CFLAGS) maina.o  ds_memory.o ds_array.o -o main1
 
 insert_array: insert_array.o ds_memory.o ds_array.o
 	$(CC) $(CFLAGS) insert_array.o ds_memory.o ds_array.o -o insert_array
@@ -23,3 +26,6 @@ insert_array.o: insert_array.c
 
 ds_list.o: ds_list.c
 	$(CC) $(CFLAGS) -c ds_list.c -o$@
+
+maina.o: maina.c
+	$(CC) $(CFLAGS) -c maina.c -o$@

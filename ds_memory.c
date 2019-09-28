@@ -20,6 +20,7 @@ ds_create: create file of filename; write "header" (ds_file.block) into file
 int ds_create(char *filename, long size){
   FILE* fp = fopen(filename, "wb");
   int checker, i;
+    char byte = '\0';
 
   if(fp == NULL){
     return 1;
@@ -43,7 +44,6 @@ int ds_create(char *filename, long size){
   }
 
   /*write bytes after file header*/
-  char byte = '\0';
   for(i = 0; i < size; i++){
     fwrite(&byte, sizeof(byte), 1, fp);
   }
@@ -165,8 +165,9 @@ void *ds_read(void *ptr, long start, long bytes){ /*rCATUSION: reading fat value
 long ds_write(long start, void *ptr, long bytes){
   int flag;
 
+
+
   if(ds_file.fp == NULL){
-    printf("\nfp doesnt exist dumbass");
     return -1;
   }
 
