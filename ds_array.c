@@ -40,6 +40,11 @@ int ds_create_array(){
     return flag;
   }
 
+  flag = ds_finish();
+  if(flag != 1){
+    return -1;
+  }
+
   return 0;
 }
 
