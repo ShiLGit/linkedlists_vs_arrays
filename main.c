@@ -13,12 +13,24 @@ void reset_file(){
 }
 
 int main(){
+
   reset_file();
   ds_init_list();
+  ds_init_list();
 
-   ds_insert( 100, 0 );
+   ds_insert( 0, 0 );
 
+   ds_insert( 1, 1 );
 
+   ds_insert( 1, 2 );
+
+   ds_insert( -1, 0 );
+
+   ds_insert( -2, 0 );
+
+   ds_insert( -3, 0 );
+
+   ds_finish();
 
   ds_init_list();
   ds_print_list();
