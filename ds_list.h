@@ -16,4 +16,6 @@ int ds_swap(long, long);
 int ds_read_elements(char*);
 int ds_finish();
 
+void ds_print_list();
+
 #endif

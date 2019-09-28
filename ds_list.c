@@ -22,7 +22,6 @@ int ds_init_list(){
 int ds_insert(int value, long index){
   ds_list_item new, dummy, prev;
   void *headBuffer = malloc(sizeof(long));
-  void *nextBuffer = malloc(sizeof(long));
   int i;
   long newHead, head_loc, next_loc, new_loc, prev_loc;;
 
@@ -34,10 +33,13 @@ int ds_insert(int value, long index){
   /*get first number in file */
   ds_read(headBuffer, 0, sizeof(long));
   head_loc = *(long*)headBuffer;
-  printf("\nheadloc = %ld", head_loc);
 
   /*edge case: the list is empty - create furst NOAD!*/
   if(head_loc== -1){
+    if(index != 0){
+      printf("\nbad index jackass (init)");
+      return -1;
+    }
     new.item = value;
     new.next = -1;
     newHead = sizeof(long);
@@ -46,6 +48,8 @@ int ds_insert(int value, long index){
     headBuffer = &newHead;
     ds_malloc(sizeof(new));
     ds_write(0, headBuffer, sizeof(long));
+
+
     if(ds_write(sizeof(long), (void*)&new, sizeof(new)) == -1){
         return -1;
     }
@@ -55,37 +59,66 @@ int ds_insert(int value, long index){
   /*case other lmaoooo*/
   next_loc = head_loc;
   prev_loc = head_loc;
-  new_loc = head_loc + sizeof(ds_list_item);
+  new_loc = ds_malloc(sizeof(ds_list_item));
 
   /*read "next" of node at index-1*/
   for ( i =0; i < index; i++){
     ds_read(&dummy, next_loc, sizeof(ds_list_item));
-    printf("\nnext: %ld", dummy.next);
+
+    if(dummy.next == -1 && i != index - 1){
+      if(i == index -1){
+        printf("\nNew element added!!!!!!");
+      }
+      printf("\nbad index jackass");
+      return -1;
+    }
 
     if(i == index - 2){/*set prev_loc to point to location of node[index-1]*/
       prev_loc = dummy.next;
     }
     if(i == index - 1){/*we're on last loop iteration*/
-      prev.item = value;
+      ds_print_list();
+      prev.item = dummy.item;
       prev.next = new_loc;
+      printf("\npre-node item = %d, next = %ld", prev.item, prev.next);
 
-      ds_write(prev_loc, (void*)&prev, sizeof(long));
+      ds_write(prev_loc, (void*)&prev, sizeof(ds_list_item));
     }
-    if(dummy.next == -1){/*traversed to end of list without reaching node[index-1] because ur dumb ass input an invalid index*/
-      return -1;
-    }
+
     next_loc = dummy.next;
   }
 
 
   /*set and write the new node intfo ile */
   new.item = value;
-  new.next = head_loc;
-  ds_malloc(sizeof(ds_list_item));
+  new.next = next_loc;
   ds_write(new_loc, (void*)&new, sizeof(ds_list_item));
 
-  /*update head*/
-  ds_write(0, (void*)&new_loc, sizeof(long));
-  free(nextBuffer);
+  /*update head if inserting at start of list*/
+  if(index == 0){
+      ds_write(0, (void*)&new_loc, sizeof(long));
+  }
+
   return 0;
+}
+
+void ds_print_list(){
+  void* buffer = malloc(sizeof(long));
+  void* nodeBuffer = malloc(sizeof(ds_list_item));
+  ds_list_item read;
+  int i = 0;
+  long nextLoc;
+
+  ds_read(buffer, 0, sizeof(long));
+  nextLoc = *(long*)buffer;
+  printf("\nhead = %ld", *(long*)buffer);
+
+  do{
+    ds_read(nodeBuffer, nextLoc, sizeof(ds_list_item));
+    read = *(ds_list_item*)nodeBuffer;
+    printf("\nIndex %d: item = %d\tnext = %ld", i, read.item, read.next );
+    nextLoc = read.next;
+    i++;
+  }while (read.next != -1 &&i != 20);
+
 }
