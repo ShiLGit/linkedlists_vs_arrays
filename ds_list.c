@@ -37,7 +37,7 @@ int ds_insert(int value, long index){
   /*edge case: the list is empty - create furst NOAD!*/
   if(head_loc== -1){
     if(index != 0){
-      printf("\nbad index jackass (init)");
+      free(headBuffer);
       return -1;
     }
     new.item = value;
@@ -48,14 +48,16 @@ int ds_insert(int value, long index){
     headBuffer = &newHead;
     ds_malloc(sizeof(new));
     ds_write(0, headBuffer, sizeof(long));
-
-
     if(ds_write(sizeof(long), (void*)&new, sizeof(new)) == -1){
-        return -1;
+      free(headBuffer);
+      return -1;
     }
+
+    free(headBuffer);
     return 0;
   }
 
+  free(headBuffer);
   /*case other lmaoooo*/
   next_loc = head_loc;
   prev_loc = head_loc;
@@ -67,9 +69,7 @@ int ds_insert(int value, long index){
 
     if(dummy.next == -1 && i != index - 1){
       if(i == index -1){
-        printf("\nNew element added!!!!!!");
       }
-      printf("\nbad index jackass");
       return -1;
     }
 
@@ -79,7 +79,6 @@ int ds_insert(int value, long index){
     if(i == index - 1){/*we're on last loop iteration*/
       prev.item = dummy.item;
       prev.next = new_loc;
-      printf("\npre-node item = %d, next = %ld", prev.item, prev.next);
 
       ds_write(prev_loc, (void*)&prev, sizeof(ds_list_item));
     }
@@ -155,10 +154,8 @@ int ds_swap(long index1, long index2){
       index2 = index1;
       index1=temp;
     }
-    printf("\ni1 = %ld, i2 = %ld", index1, index2);
 
     ds_read(&next, 0, sizeof(long));
-    printf("\nnext = %ld", next);
 
     /*set add1 = head in case index1 = 0?*/
     addr1 = next;
@@ -167,7 +164,6 @@ int ds_swap(long index1, long index2){
     for(i = 0; i <= index2; i++){
       ds_read(&dummy, next, sizeof(ds_list_item));
       if(dummy.next == -1 && i < index2){
-        printf("\ninvalid index ");
         return -1;
       }
 
@@ -179,10 +175,8 @@ int ds_swap(long index1, long index2){
 
       if(i == index1){
         node1 = dummy;
-        printf("\nnode1 found - item = %d next = %ld", node1.item, node1.next);
       }else if (i == index2){
         node2  = dummy;
-        printf("\nnode2 found - item = %d next = %ld", node2.item, node2.next);
       }
       next = dummy.next;
     }
@@ -198,6 +192,27 @@ int ds_swap(long index1, long index2){
     return 0;
 }
 
+long ds_find(int target){
+  long read_loc;
+  void* rflag;
+  ds_list_item dummy;
+
+  rflag = ds_read(&read_loc, 0, sizeof(long));
+  if(rflag == NULL){
+    return -1;
+  }
+
+  do{
+    ds_read(&dummy, read_loc, sizeof(ds_list_item));
+    if(dummy.item == target){
+      return read_loc;
+    }
+    read_loc = dummy.next;
+  }while(dummy.next != -1);
+
+  return -1;
+
+}
 
 int ds_read_elements(char* filename){
   FILE *fp = fopen(filename, "r");
@@ -242,5 +257,6 @@ void ds_print_list(){
     nextLoc = read.next;
     i++;
   }while (read.next != -1 );
-
+  free(buffer);
+  free(nodeBuffer);
 }

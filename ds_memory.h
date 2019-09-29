@@ -38,5 +38,8 @@ int ds_finish();
 
 void *ds_read(void*, long, long);
 long ds_write(long, void*, long);
+int ds_get_writes();
+int ds_get_reads();
 
+void ds_reset_counter();
 #endif

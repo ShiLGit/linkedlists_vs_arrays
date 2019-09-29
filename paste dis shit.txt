@@ -1,0 +1,7 @@
+main2: main.o ds_memory.o ds_array.o ds_list.o
+	$(CC) $(CFLAGS) main.o ds_memory.o ds_list.o -o main2
+
+main1: maina.o ds_memory.o ds_array.o
+	$(CC) $(CFLAGS) maina.o  ds_memory.o ds_array.o -o main1
+
+main2 main1 

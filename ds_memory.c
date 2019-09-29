@@ -196,3 +196,16 @@ void ds_print(int max){
   }
   printf("\n");
 }
+
+void ds_reset_counter(){
+  ds_counts.reads = 0;
+  ds_counts.writes = 0;
+}
+
+int ds_get_reads(){
+  return ds_counts.reads;
+}
+
+int ds_get_writes(){
+  return ds_counts.writes;
+}

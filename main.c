@@ -20,8 +20,9 @@ int main(){
   ds_finish_list();
 */
   ds_init_list();
-  ds_replace(505, 5);
-  ds_swap(1, 8);
+
+  ds_find(3);
+  ds_insert(99, 4);
   ds_print_list();
   ds_finish_list();
 

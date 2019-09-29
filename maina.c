@@ -51,5 +51,7 @@ ds_print_array();
 /*
 //ds_finish_array();
 ds_print_array();
-  */return 0;
+  */
+  free(fml);
+  return 0;
 }

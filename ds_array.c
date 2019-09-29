@@ -55,11 +55,13 @@ int ds_init_array(){
 
   flag = ds_init("array.bin");
   if(flag != 0){
+      free(val);
       return flag;
   }
 
   flag2 = ds_read(val, 0, sizeof(long));
   if(flag2 == NULL){
+    free(val);
     printf("\nds_init: ds_read() failed!");
     return 1;
   }
@@ -96,10 +98,13 @@ int ds_insert(int value, long index){
 
   /*preliminary errorechgkinc*/
   if(index >= MAX_ELEMENTS || index < 0){/**index out of bounds*/
+    free(ptrRead);
     return 1;
   }else if(elements == MAX_ELEMENTS){/*can't insert more eleemenest*/
+    free(ptrRead);
     return 1;
   }else if(index > elements){/*tryna insert element at phat index when array is too small*/
+    free(ptrRead);
     return 1;
   }
 
@@ -108,9 +113,11 @@ int ds_insert(int value, long index){
     ptrWrite = &value;
     flag2 = ds_write(sizeof(int)*index +sizeof(long), ptrWrite, sizeof(int));
     if(flag2 == -1){
+      free(ptrRead);
       return flag2;
     }else{
       elements++;
+      free(ptrRead);
       return 0;
     }
   }
@@ -121,6 +128,7 @@ int ds_insert(int value, long index){
     flag = ds_read(ptrRead, sizeof(int)*index + sizeof(long), sizeof(int)); /*+sizeof long to account for element -tracking long at "beginning" of .bin*/
     if(flag == NULL){
       printf("\nds_insert: ds_read failed");
+      free(ptrRead);
       return 1;
     }
     temp = *(int*)ptrRead;
@@ -186,6 +194,7 @@ int ds_delete(long index){
 
   /*preliminary errorcheck*/
   if(index >= MAX_ELEMENTS|| index < 0 ||index >= elements){
+    free(nextVal);
     return -1;
   }
 
@@ -205,6 +214,7 @@ int ds_delete(long index){
   }
 
   if(flag != 0){/*didn't do errorchecking for ds_read because TOO DANMN LAZY FFFFFFS*/
+    free(nextVal);
     return -1;
   }
 
@@ -218,10 +228,13 @@ int ds_swap(long index1, long index2){
   void* readIn = malloc(sizeof(int));
   /*preliminary errorcheck*/
   if(index1 >= MAX_ELEMENTS || index1 >= elements || index1 < 0){
+    free(readIn);
     return -1;
   }else if (index2 >= MAX_ELEMENTS ||index2 >= elements || index2 < 0){
+    free(readIn);
     return -1;
   }else if(index1 == index2){
+    free(readIn);
     return 0;
   }
 
@@ -236,16 +249,18 @@ int ds_swap(long index1, long index2){
   /*move value at index 2 into index 1*/
   flag = ds_replace(*(int*)readIn, index1);
   if(flag !=0){
+    free(readIn);
     return -1;
   }
 
   /*move value stored in temp (i.e. index1's) to index2*/
   flag = ds_replace(temp, index2);
   if(flag !=0){
+    free(readIn);
     return -1;
   }
 
-
+  free(readIn);
   return 0;
 }
 
@@ -256,9 +271,11 @@ int ds_find(int target){
   for(i = 0; i < elements; i++){
     ds_read(val, sizeof(long) + i *sizeof(int), sizeof(int));
     if(target == *(int*)val){
+      free(val);
       return i;
     }
   }
+  free(val);
   return -1;
 }
 
