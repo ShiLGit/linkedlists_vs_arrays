@@ -13,28 +13,17 @@ void reset_file(){
 }
 
 int main(){
-
+/*
   reset_file();
   ds_init_list();
+  ds_read_elements("elements.txt");
+  ds_finish_list();
+*/
   ds_init_list();
-
-   ds_insert( 0, 0 );
-
-   ds_insert( 1, 1 );
-
-   ds_insert( 1, 2 );
-
-   ds_insert( -1, 0 );
-
-   ds_insert( -2, 0 );
-
-   ds_insert( -3, 0 );
-
-   ds_finish();
-
-  ds_init_list();
+  ds_replace(505, 5);
+  ds_swap(1, 8);
   ds_print_list();
-  ds_finish();
+  ds_finish_list();
 
 
 

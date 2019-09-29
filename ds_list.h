@@ -14,7 +14,7 @@ int ds_insert(int, long);
 int ds_delete(long);
 int ds_swap(long, long);
 int ds_read_elements(char*);
-int ds_finish();
+int ds_finish_list();
 
 void ds_print_list();
 
