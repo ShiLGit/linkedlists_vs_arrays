@@ -40,6 +40,7 @@ void *ds_read(void*, long, long);
 long ds_write(long, void*, long);
 int ds_get_writes();
 int ds_get_reads();
+int ds_delete(long);
 
 void ds_reset_counter();
 #endif

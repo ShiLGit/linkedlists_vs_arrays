@@ -1,3 +1,8 @@
+/*
+Name: Lilian Shi
+Stu#: 1048355
+Email: lshi02@uoguelph.ca
+*/
 #ifndef __DS_LIST__
 #define __DS_LIST__
 

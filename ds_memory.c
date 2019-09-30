@@ -82,7 +82,6 @@ long ds_malloc(long amount){
     }
   }
   if(indexOne == -1){
-    printf("\nNo block1 fond.");
     return -1;
   }
 
@@ -93,7 +92,7 @@ long ds_malloc(long amount){
     }
   }
   if(indexTwo == -1){/*unable to find blcok 2 >>set returnval from start of block1 to -1 to indicate errrrerus*/
-    printf("\nNo block2 found.");
+
   }else{
     /*set block 2 first if it exists*/
     ds_file.block[indexTwo].start = ds_file.block[indexOne].start + amount;
@@ -111,7 +110,6 @@ void ds_free(long start){
   int i;
   for(i = 0; i < 4096; i++){
     if(ds_file.block[i].start == start){
-      printf("\nds_free: freed block at %d", i);
       ds_file.block[i].alloced = '0';
       break;
     }
@@ -154,7 +152,6 @@ void *ds_read(void *ptr, long start, long bytes){ /*rCATUSION: reading fat value
 
   flag = fread(ptr, bytes, 1, ds_file.fp);
   if(flag != 1){
-    printf("\nfrom ds_read: fread() failed :%d", flag);
     return NULL;
   }
 

@@ -1,3 +1,8 @@
+/*
+Name: Lilian Shi
+Stu#: 1048355
+Email: lshi02@uoguelph.ca
+*/
 #include "ds_array.h"
 #include "ds_memory.h"
 #include <stdlib.h>
@@ -18,25 +23,21 @@ int ds_create_array(){
   */
   flag = ds_init("array.bin");
   if(flag != 0){/*ds_init failed*/
-    printf("\nFrom ds_create_array(): ds_init() failed");
     return flag;
   }
 
   flag = ds_malloc(sizeof(long)); /*malloc for long at start of .bin*/
   if(flag == -1){
-    printf("\nFrom ds_create_array(): ds_malloc failed");
     return flag;
   }
 
   flag = ds_write(0, &toWrite, sizeof(long));/*set value of first long to 0*/
   if(flag == -1){
-    printf("\nFrom ds_create_array(): ds_malloc failed");
     return flag;
   }
 
   flag = ds_malloc(MAX_ELEMENTS * sizeof(int)); /**malloc for entire array*/
   if(flag == -1){
-    printf("\nFrom ds_create_array(): ds_malloc failed");
     return flag;
   }
 
@@ -62,7 +63,6 @@ int ds_init_array(){
   flag2 = ds_read(val, 0, sizeof(long));
   if(flag2 == NULL){
     free(val);
-    printf("\nds_init: ds_read() failed!");
     return 1;
   }
   elements = *(long*)val;
@@ -127,7 +127,6 @@ int ds_insert(int value, long index){
     /*read current RESIDENT OF INDEX into temp */
     flag = ds_read(ptrRead, sizeof(int)*index + sizeof(long), sizeof(int)); /*+sizeof long to account for element -tracking long at "beginning" of .bin*/
     if(flag == NULL){
-      printf("\nds_insert: ds_read failed");
       free(ptrRead);
       return 1;
     }
@@ -141,10 +140,7 @@ int ds_insert(int value, long index){
     value = temp;
   }
 
-  printf("\nele = %ld", elements);
   elements++;
-  printf("\nele = %ld", elements);
-
   free(ptrRead);
   return 0;
 }
@@ -206,8 +202,6 @@ int ds_delete(long index){
   nextByte = 1;
   for(i = index; i < elements - 1; i++){
     ds_read(nextVal, sizeof(long) + (index+nextByte)*sizeof(int), sizeof(int));
-
-    printf("\n%d, %d: next value = %d", i, nextByte,*(int*)nextVal);
     flag = ds_replace(*(int*)nextVal, i);
 
     nextByte++;
@@ -240,11 +234,9 @@ int ds_swap(long index1, long index2){
 
   /*NO ERRORCHECKING TOO LAZY*/
   ds_read(readIn, sizeof(long) + index1*sizeof(int), sizeof(int));
-  printf("\n# at index 1: %d", *(int*)readIn);
   temp = *(int*)readIn;
 
   ds_read(readIn, sizeof(long) + index2*sizeof(int), sizeof(int));
-  printf("\n# at index 2: %d", *(int*)readIn);
 
   /*move value at index 2 into index 1*/
   flag = ds_replace(*(int*)readIn, index1);
@@ -285,11 +277,9 @@ void ds_print_array(){
 
   /*ds_init_array();*/
   ds_print(10);
-  printf("\nds_print_array: Elements = %ld", elements);
   for(i = 0; i<elements; i++){
     if(ds_read(val, sizeof(long) + i * sizeof(int), sizeof(int)) == 0)
       break;
-    printf("\narray[%d] = %d", i , *(int*)val);
   }
 
   free(val);

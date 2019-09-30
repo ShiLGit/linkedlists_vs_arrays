@@ -4,4 +4,51 @@ main2: main.o ds_memory.o ds_array.o ds_list.o
 main1: maina.o ds_memory.o ds_array.o
 	$(CC) $(CFLAGS) maina.o  ds_memory.o ds_array.o -o main1
 
-main2 main1 
+main2 main1
+
+
+int ds_delete(long index){
+  int i;
+  long addr_free, addr_write, read_loc, newHead;
+  ds_list_item replacement, dummy;
+
+  if(index < 0){
+    return -1;
+  }
+
+  ds_read(&read_loc, 0, sizeof(long));
+
+  /*edge case: first node*/
+  if(index == 0){
+    ds_read(&dummy, read_loc, sizeof(ds_list_item));
+    newHead = dummy.next;
+    ds_write(0, &newHead, sizeof(ds_list_item));
+    ds_free(read_loc);
+
+    return 0;
+  }
+
+  for(i = 0; i <= index; i++){
+    ds_read(&dummy, read_loc, sizeof(ds_list_item));
+    if(dummy.next == -1 && i != index){
+      return -1;
+    }
+    if(i == index - 2){
+      addr_write = dummy.next;
+    }
+    if(i == index - 1){
+      addr_free = dummy.next;
+      replacement.item = dummy.item;
+    }
+    if(i == index){
+      replacement.next = dummy.next;
+    }
+    read_loc = dummy.next;
+  }
+  ds_write(addr_write, &replacement, sizeof(ds_list_item));
+  ds_free(addr_free);
+
+  return 0;
+
+
+}

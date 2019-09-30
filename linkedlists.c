@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "ds_memory.h"
-#include "ds_array.h"
+#include "ds_list.h"
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,11 +10,11 @@ CAUTION: THIS SHIT INCREMENTS THE READWRITE COUNT
 FILE* fp;
 
 void reset_array_file(){
-  ds_create("array.bin", 2048);
-  ds_create_array();
-  ds_init_array();
+  ds_create("list.bin", 2048);
+  ds_create_list();
+  ds_init_list();
   ds_read_elements("elements.txt");
-  ds_finish_array();
+  ds_finish_list();
   ds_reset_counter();
 }
 
@@ -70,17 +70,17 @@ void Iterate(int numEle){
     printf("\n%d", i);
     printf("\n index = %ld", index);
 
-    ds_init_array();
-
+    ds_init_list();
+    
     /*actual function00*/
-    ds_swap(index, index2);
-
-    ds_finish_array();
+    ds_delete(index);
+    printf("\npost....");
+    ds_finish_list();
 
     reads = ds_get_reads();
     writes = ds_get_writes();
     printf("\nwriting reads %d writes %d", reads, writes);
-    ds_finish_array();
+    ds_finish_list();
 
     /*file SHIT*/
     /*set vars to plot*/
@@ -108,7 +108,9 @@ void Iterate(int numEle){
 }
 int main(){
   int i;
-  fp  = fopen("data_arrays.txt", "w");
+  fp  = fopen("LL_delete.txt", "w");
+  reset_array_file();
+
   for(i = 1; i <= 10; i++){
     fillFile(i*10);
     Iterate(i * 10);
@@ -119,7 +121,14 @@ int main(){
 }
 
 int main1(){
+  ds_create("list.bin", 2048);
+  ds_create_list();
+  ds_init_list();
+  ds_read_elements("elements.txt");
+  ds_insert(9000, 4);
+  printf("\ndelete status = %d", ds_delete(0));
 
-
+  ds_finish_list();
+  ds_print(10);
   return 0;
 }
