@@ -108,7 +108,7 @@ void Iterate(int numEle){
 }
 int main(){
   int i;
-  fp  = fopen("data_arrays.txt", "w");
+  fp  = fopen("data_arrays_swap.txt", "w");
   for(i = 1; i <= 10; i++){
     fillFile(i*10);
     Iterate(i * 10);

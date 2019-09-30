@@ -71,9 +71,9 @@ void Iterate(int numEle){
     printf("\n index = %ld", index);
 
     ds_init_list();
-    
+
     /*actual function00*/
-    ds_delete(index);
+    ds_swap(index, index2);
     printf("\npost....");
     ds_finish_list();
 
@@ -108,7 +108,7 @@ void Iterate(int numEle){
 }
 int main(){
   int i;
-  fp  = fopen("LL_delete.txt", "w");
+  fp  = fopen("data_LL_swap.txt", "w");
   reset_array_file();
 
   for(i = 1; i <= 10; i++){
@@ -120,12 +120,14 @@ int main(){
   return 0;
 }
 
-int main1(){
+int maiwn(){
   ds_create("list.bin", 2048);
   ds_create_list();
   ds_init_list();
   ds_read_elements("elements.txt");
-  ds_insert(9000, 4);
+  ds_print_list();
+  ds_swap(9, 0);
+  ds_print_list();
   printf("\ndelete status = %d", ds_delete(0));
 
   ds_finish_list();
