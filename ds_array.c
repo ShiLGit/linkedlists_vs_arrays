@@ -13,14 +13,7 @@ long elements;
 int ds_create_array(){
   int flag;
   long toWrite = 0;
-
-  /* commented out because the assignment instructions changed ffs
-  flag = ds_create("array.bin", 2048);
-  if(flag != 0){
-    printf("\nFrom ds_create_array(): ds_create() failed");
-    return flag;
-  }
-  */
+  
   flag = ds_init("array.bin");
   if(flag != 0){/*ds_init failed*/
     return flag;
